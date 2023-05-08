@@ -1,5 +1,7 @@
+import numpy as np
+
 def int_to_16mer(x):
-  '''Converts an integer to a 16-mer'''
+  '''Converts an integer to a 16-mer. Assumes that the integer is in range [0, 2**32)'''
   def pair_to_base(b):
     '''Converts binary pair to base'''
     if b=='00':
