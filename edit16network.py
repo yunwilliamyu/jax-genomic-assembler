@@ -4,6 +4,8 @@ import flax
 from flax import linen as nn
 from flax.training import train_state, checkpoints
 import optax
+import jax
+import jax.numpy as jnp
 
 class Encoder(nn.Module):
   latents: int
