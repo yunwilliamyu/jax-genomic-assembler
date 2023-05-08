@@ -1,5 +1,5 @@
 import numpy as np
-from Levenshtein import distance
+import Levenshtein
 
 def int_to_16mer(x):
   '''Converts an integer to a 16-mer. Assumes that the integer is in range [0, 2**32)'''
@@ -60,7 +60,7 @@ def sample_pairs_16mers(seed=42, sample_estimate=10000):
   # Notice that random strings are probably only about distance somewhat lower away from each other
   XY = prng.randint(low=0, high=(4**16), size=(sample_start*57//100,2))
   XY = [(int_to_16mer(x), int_to_16mer(y)) for x,y in XY]
-  XYD2 = [(x, y, distance(x,y)) for x,y in XY]
+  XYD2 = [(x, y, Levenshtein.distance(x,y)) for x,y in XY]
   XYD.extend(XYD2)
 
   # Thus, we need to have a way to sample our 16-mer pairs to be closer to each other
@@ -82,7 +82,7 @@ def sample_pairs_16mers(seed=42, sample_estimate=10000):
     X = prng.randint(low=0, high=(4**16), size=sample_start*scale//100)
     X = [int_to_16mer(x) for x in X]
     Y = [mutate(x, d, prng=prng) for x in X]
-    XYD2 = [(x, y, distance(x,y)) for x,y in zip(X,Y)]
+    XYD2 = [(x, y, Levenshtein.distance(x,y)) for x,y in zip(X,Y)]
     XYD.extend(XYD2)
 
   #c = Counter([d for _,_,d in XYD])
@@ -99,6 +99,6 @@ def sample_pairs_16mers(seed=42, sample_estimate=10000):
     X = prng.randint(low=0, high=(4**16), size=sample_start*scale//100)
     X = [int_to_16mer(x) for x in X]
     Y = [mutate(x, d, types=['S'], prng=prng) for x in X]   
-    XYD2 = [(x, y, distance(x,y)) for x,y in zip(X,Y)]
+    XYD2 = [(x, y, Levenshtein.distance(x,y)) for x,y in zip(X,Y)]
     XYD.extend(XYD2) 
   return XYD
