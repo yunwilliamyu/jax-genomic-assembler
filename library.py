@@ -48,3 +48,56 @@ def mutate(x, d, types=['I', 'D', 'S'], prng=np.random.RandomState(None)):
   ans = prepend + ans
   ans = ans[:len(x)]
   return ans
+
+def sample_pairs_16mers(seed=42, sample_estimate=10000):
+  '''Actual number will be be approximately sample_estimate for large numbers'''
+  prng = np.random.RandomState(seed)
+  sample_start = sample_estimate // 2
+
+  XYD = []
+  # Initially start by generating random pairs.
+  # Notice that random strings are probably only about distance somewhat lower away from each other
+  XY = prng.randint(low=0, high=(4**16), size=(sample_start*57//100,2))
+  XY = [(int_to_16mer(x), int_to_16mer(y)) for x,y in XY]
+  XYD2 = [(x, y, distance(x,y)) for x,y in XY]
+  XYD.extend(XYD2)
+
+  # Thus, we need to have a way to sample our 16-mer pairs to be closer to each other
+  for d in range(0,16):
+    if d>10:
+      scale=5
+    elif d>5:
+      scale=7
+    elif d==2:
+      scale=2
+    elif d==3:
+      scale=8
+    elif d==1:
+      scale=7
+    elif d==0:
+      scale=11
+    else:
+      scale=12
+    X = prng.randint(low=0, high=(4**16), size=sample_start*scale//100)
+    X = [int_to_16mer(x) for x in X]
+    Y = [mutate(x, d, prng=prng) for x in X]
+    XYD2 = [(x, y, distance(x,y)) for x,y in zip(X,Y)]
+    XYD.extend(XYD2)
+
+  #c = Counter([d for _,_,d in XYD])
+
+  # However, because of parity issues with indels, we are going to manually add
+  # some more substitution-only examples for distance 1, 3, 5
+  for d in [1,3,5]:
+    if d==1:
+      scale=12
+    elif d==3:
+      scale=16
+    elif d==5:
+      scale=3
+    X = prng.randint(low=0, high=(4**16), size=sample_start*scale//100)
+    X = [int_to_16mer(x) for x in X]
+    Y = [mutate(x, d, types=['S'], prng=prng) for x in X]   
+    XYD2 = [(x, y, distance(x,y)) for x,y in zip(X,Y)]
+    XYD.extend(XYD2) 
+  return XYD
