@@ -102,3 +102,58 @@ def sample_pairs_16mers(seed=42, sample_estimate=10000):
     XYD2 = [(x, y, Levenshtein.distance(x,y)) for x,y in zip(X,Y)]
     XYD.extend(XYD2) 
   return XYD
+
+# Transformations applied on each read => bring them into a numpy array
+def read_to_onehot(x, k=16):
+  '''Returns one-hot encoding of A,C,G,T string. Treats any other character as blank.
+   Assumes k-char max'''
+  #ans = np.zeros(len(x)*4)
+  if len(x)>k:
+    raise ValueError('Strings must have maximum ' + str(k) + ' characters')
+  ans = np.zeros(k*4)
+  for i, c in enumerate(x):
+    if c == 'A':
+      ans[4*i] = 1
+    elif c =='C':
+      ans[4*i+1] = 1
+    elif c =='G':
+      ans[4*i+2] = 1
+    elif c =='T':
+      ans[4*i+3] = 1
+    #else:
+    #  raise ValueError('Strings must only contain A, C, G, T. Please preprocess_string first')
+  return ans
+
+def onehot_to_read(y, k=16):
+  '''Turns a one-hot encoding of A,C,G,T string back to A,C,G,T'''
+  if len(y) != k*4:
+    raise ValueError('Vector must be length ' + str (k*4))
+  ans = [''.join([str(x2) for x2 in x]) for x in y.reshape((-1,4)).astype(np.uint8)]
+  for i, v in enumerate(ans):
+    if v=='1000':
+      ans[i] = 'A'
+    elif v=='0100':
+      ans[i] = 'C'
+    elif v=='0010':
+      ans[i] = 'G'
+    elif v=='0001':
+      ans[i] = 'T'
+    else:
+      ans[i] = 'N'
+  return ''.join(ans)
+
+def numpy_collate(batch):
+  if isinstance(batch[0], np.ndarray):
+    return np.stack(batch)
+  elif isinstance(batch[0], (tuple,list)):
+    transposed = zip(*batch)
+    return [numpy_collate(samples) for samples in transposed]
+  else:
+    return np.array(batch)
+  
+ def pad_string(read, k=16):
+  '''Pads a string to length 256'''
+  if len(read) < k:
+    return read + 'N'*(k-len(read))
+  else:
+    return read[:k]
