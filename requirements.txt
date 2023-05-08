@@ -7,3 +7,5 @@ torch
 flax==0.6.9
 optax==0.1.5
 tqdm==4.65.0
+jax==0.4.8
+
