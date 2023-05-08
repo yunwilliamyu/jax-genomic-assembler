@@ -151,14 +151,14 @@ def numpy_collate(batch):
   else:
     return np.array(batch)
   
- def pad_string(read, k=16):
+def pad_string(read, k=16):
   '''Pads a string to length 256'''
   if len(read) < k:
     return read + 'N'*(k-len(read))
   else:
     return read[:k]
 
- class SamplePairs16mers_with_distance:
+class SamplePairs16mers_with_distance:
   '''Samples pairs of 16mers and outputs them and their Levenshtein distance'''
   def __init__(self, seed=0, sample_estimate=10000):
     self.unif_data = sample_pairs_16mers(seed=seed, sample_estimate=sample_estimate)
