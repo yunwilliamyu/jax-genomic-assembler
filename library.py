@@ -1,4 +1,5 @@
 import numpy as np
+from Levenshtein import distance
 
 def int_to_16mer(x):
   '''Converts an integer to a 16-mer. Assumes that the integer is in range [0, 2**32)'''
