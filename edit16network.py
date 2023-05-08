@@ -1,5 +1,9 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
+import flax
+from flax import linen as nn
+from flax.training import train_state, checkpoints
+import optax
 
 class Encoder(nn.Module):
   latents: int
