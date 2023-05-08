@@ -157,3 +157,17 @@ def numpy_collate(batch):
     return read + 'N'*(k-len(read))
   else:
     return read[:k]
+
+ class SamplePairs16mers_with_distance:
+  '''Samples pairs of 16mers and outputs them and their Levenshtein distance'''
+  def __init__(self, seed=0, sample_estimate=10000):
+    self.unif_data = sample_pairs_16mers(seed=seed, sample_estimate=sample_estimate)
+    self.length = len(self.unif_data)
+  def __getitem__(self, idx):
+    x, y, d = self.unif_data[idx]
+    vec_x = read_to_onehot(x, k=len(x))
+    vec_y = read_to_onehot(y, k=len(y))
+    label = d
+    return np.reshape(vec_x, (-1,1)), np.reshape(vec_y, (-1, 1)), label
+  def __len__(self):
+    return self.length
