@@ -52,7 +52,7 @@ def mutate(x, d, types=['I', 'D', 'S'], prng=np.random.RandomState(None)):
 
 def sample_16mers(seed=42, size=10000):
   '''Just random generates a bunch of 16-mers'''
-  prng = np.RandomState(seed)
+  prng = np.random.RandomState(seed)
   samp = prng.randint(low=0, high=(4**16), size=size)
   return [int_to_16mer(x) for x in samp]
 
