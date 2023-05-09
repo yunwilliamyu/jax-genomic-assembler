@@ -146,6 +146,23 @@ def onehot_to_read(y):
       ans[i] = 'N'
   return ''.join(ans)
 
+def probability_to_read(y):
+  '''Turns a logit one-hot encoding of A,C,G,T string back to A,C,G,T'''
+  y = y.reshape((4, -1)).argmax(axis=0)
+  ans = y
+  for i, v in enumerate(y):
+    if v==0:
+      ans[i] = 'A'
+    elif v==1:
+      ans[i] = 'C'
+    elif v==2:
+      ans[i] = 'G'
+    elif v==3:
+      ans[i] = 'T'
+    else:
+      ans[i] = 'N'
+  return ''.join(ans)
+
 def numpy_collate(batch):
   if isinstance(batch[0], np.ndarray):
     return np.stack(batch)
