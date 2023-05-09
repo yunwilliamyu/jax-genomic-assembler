@@ -178,7 +178,7 @@ class SamplePairs16mers_with_distance:
   def __len__(self):
     return self.length
   
- class Sample16mers:
+class Sample16mers:
   '''Samples 16mers and converts them to onehot numpy encoding'''
   def __init__(self, seed=0, size=10000):
     self.unif_data = sample_16mers(seed=seed, size=size)
