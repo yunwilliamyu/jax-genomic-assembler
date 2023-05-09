@@ -130,10 +130,8 @@ def read_to_onehot(x, k=16):
     #  raise ValueError('Strings must only contain A, C, G, T. Please preprocess_string first')
   return ans
 
-def onehot_to_read(y, k=16):
+def onehot_to_read(y):
   '''Turns a one-hot encoding of A,C,G,T string back to A,C,G,T'''
-  if len(y) != k*4:
-    raise ValueError('Vector must be length ' + str (k*4))
   ans = [''.join([str(x2) for x2 in x]) for x in y.reshape((-1,4)).astype(np.uint8)]
   for i, v in enumerate(ans):
     if v=='1000':
