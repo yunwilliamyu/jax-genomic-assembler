@@ -50,6 +50,12 @@ def mutate(x, d, types=['I', 'D', 'S'], prng=np.random.RandomState(None)):
   ans = ans[:len(x)]
   return ans
 
+def sample_16mers(seed=42, size=10000):
+  '''Just random generates a bunch of 16-mers'''
+  prng = np.RandomState(seed)
+  samp = prng.randint(low=0, high=(4**16), size=size)
+  return [int_to_16mer(x) for x in samp]
+
 def sample_pairs_16mers(seed=42, sample_estimate=10000):
   '''Actual number will be be approximately sample_estimate for large numbers'''
   prng = np.random.RandomState(seed)
