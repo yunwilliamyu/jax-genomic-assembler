@@ -148,7 +148,7 @@ def onehot_to_read(y):
 
 def probability_to_read(y):
   '''Turns a logit one-hot encoding of A,C,G,T string back to A,C,G,T'''
-  y = y.reshape((4, -1)).argmax(axis=0)
+  y = y.reshape((-1, 4)).argmax(axis=1)
   ans = ['']*len(y)
   for i, v in enumerate(y):
     if v==0:
