@@ -63,3 +63,11 @@ class EditEmbedding(nn.Module):
     ly = self.encoder(y)
     z = self.predictdistance(lx, ly)
     return z, d
+  
+class Embedding(nn.Module):
+  latents: int = 2
+  def setup(self):
+    self.encoder = Encoder(self.latents)
+  def __call__(self, x):
+    lx = self.encoder(x)
+    return lx
